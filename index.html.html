@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <title>คำนวณวันขาดราชการและโทษ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: 'Noto Sans Thai', sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+        border-left: 5px solid #e53935;
+        padding-left: 1rem;
+        color: #333;
+      }
+      label {
+        font-weight: bold;
+        margin-top: 1rem;
+        display: block;
+      }
+      input, select, button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.75rem;
+        margin-top: 0.25rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+      }
+      button {
+        background-color: #000;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #result {
+        background: #f3f3f3;
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-top: 1.5rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>📅 คำนวณวันขาดราชการและโทษ</h2>
+      <label for="startDate">วันที่เริ่มขาดราชการ:</label>
+      <input type="date" id="startDate" required />
+
+      <label for="endDate">วันที่กลับมารายงานตัว:</label>
+      <input type="date" id="endDate" required />
+
+      <label for="situation">สถานการณ์:</label>
+      <select id="situation">
+        <option value="normal">เวลาปกติ</option>
+        <option value="non-normal">เวลาไม่ปกติ</option>
+        <option value="enemy">ต่อหน้าศัตรู</option>
+      </select>
+
+      <label for="returnType">ลักษณะการกลับ:</label>
+      <select id="returnType">
+        <option value="return_self">กลับเอง</option>
+        <option value="return_captured">ถูกจับกลับ</option>
+      </select>
+
+      <label for="caseNumber">เป็นครั้งที่:</label>
+      <select id="caseNumber">
+        <option value="1">ครั้งที่ 1</option>
+        <option value="2">ครั้งที่ 2</option>
+        <option value="3">ครั้งที่ 3</option>
+        <option value="4">มากกว่า 3 ครั้ง</option>
+      </select>
+
+      <button onclick="handleSubmit()">📄 คำนวณและบันทึก</button>
+      <div id="result"></div>
+      <button onclick="location.reload()">🧹 ล้างผลลัพธ์</button>
+    </div>
+
+    <script>
+      function handleSubmit() {
+        const data = {
+          startDate: document.getElementById("startDate").value,
+          endDate: document.getElementById("endDate").value,
+          situation: document.getElementById("situation").value,
+          returnType: document.getElementById("returnType").value,
+          caseNumber: document.getElementById("caseNumber").value
+        };
+
+        fetch("https://script.google.com/macros/s/AKfycbzbkk0RTUitPJoqUgpOxYKzGXg8Ftjt9e7F_n2p9YTtr0NoWe3ZKmyXsAWiTrP_Rf5ISg/exec", {
+          method: "POST",
+          contentType: "application/json",
+          body: JSON.stringify(data)
+        })
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("result").innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById("result").innerHTML = "❌ เกิดข้อผิดพลาด: " + err;
+        });
+      }
+    </script>
+  </body>
+</html>
